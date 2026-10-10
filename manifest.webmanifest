@@ -1,0 +1,12 @@
+{
+  "name": "Looply — Short Videos",
+  "short_name": "Looply",
+  "description": "A short-video app you can make your own.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

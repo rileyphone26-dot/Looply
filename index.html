@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Looply — short videos, your way.">
+  <title>Looply</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">◉</span><span>looply</span></div>
+      <button class="text-btn" id="followingBtn">Following</button>
+      <button class="text-btn active" id="forYouBtn">For You</button>
+      <button class="search-btn" id="searchBtn" aria-label="Search">⌕</button>
+    </header>
+    <section id="feed" class="feed" aria-label="Short video feed">
+      <article class="video-card welcome">
+        <div class="welcome-content">
+          <div class="eyebrow">YOUR SPACE. YOUR VIDEOS.</div>
+          <h1>Welcome to <span>Looply</span></h1>
+          <p>A short-video app you can make your own. Add a video from your phone to start your feed.</p>
+          <label class="primary-btn upload-label">＋ Add your first video<input id="firstUpload" type="file" accept="video/*" hidden></label>
+          <small>Videos added here stay on this device in this demo.</small>
+        </div>
+        <div class="side-actions">
+          <div class="avatar">L</div><button class="action-btn like-btn" aria-label="Like">♡<small>Like</small></button>
+          <button class="action-btn comment-btn" aria-label="Comment">◯<small>Comment</small></button>
+          <button class="action-btn share-btn" aria-label="Share">↗<small>Share</small></button>
+        </div>
+      </article>
+    </section>
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item selected" data-page="home"><span>⌂</span><small>Home</small></button>
+      <button class="nav-item" data-page="discover"><span>⌕</span><small>Discover</small></button>
+      <button class="create-btn" id="uploadBtn" aria-label="Upload video">＋</button>
+      <button class="nav-item" data-page="inbox"><span>▢</span><small>Inbox</small></button>
+      <button class="nav-item" data-page="profile"><span>♙</span><small>Profile</small></button>
+    </nav>
+    <input id="uploadInput" type="file" accept="video/*" hidden>
+    <dialog id="commentDialog">
+      <form method="dialog" class="dialog-inner">
+        <div class="dialog-heading"><strong>Comments</strong><button class="close-btn">✕</button></div>
+        <p class="muted">Comments are a local demo in this version.</p>
+        <div id="commentList" class="comment-list"></div>
+        <div class="comment-form"><input id="commentInput" placeholder="Add a comment…" maxlength="240"><button id="sendComment" type="button">Post</button></div>
+      </form>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
