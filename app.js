@@ -16,7 +16,7 @@ wireCard(feed.querySelector('.welcome'));
 
 // Supabase authentication for Looply
 const LOOPLY_SUPABASE_URL = 'https://vnggkzdythazonznfizx.supabase.co';
-const LOOPLY_SUPABASE_KEY = 'REPLACE_WITH_SUPABASE_PUBLISHABLE_KEY';
+const LOOPLY_SUPABASE_KEY = 'sb_publishable_UNpqkECBh3r96pSowX0CDw_B7goBV8H';
 const authDialog = document.getElementById('authDialog');
 const authForm = document.getElementById('authForm');
 const authTitle = document.getElementById('authTitle');
