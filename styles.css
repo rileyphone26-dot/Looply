@@ -24,3 +24,14 @@
 .video-card .side-actions,.video-card .video-meta{z-index:3}
 .video-card video::-webkit-media-controls{display:none!important}
 @media(min-width:650px){.video-card video{object-fit:contain}.video-progress{max-width:460px;left:50%;right:auto;width:100%;transform:translateX(-50%)}}
+
+
+/* YouTube videos and playlists inside the main scrolling feed */
+.video-card.youtube-card{background:#050507}
+.video-card .youtube-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#050507;z-index:0}
+.youtube-card .side-actions,.youtube-card .video-meta{z-index:3}
+.youtube-label{display:inline-block;margin-top:3px;font-size:10px;color:#fff;background:#111b;padding:3px 6px;border-radius:5px}
+.youtube-card .video-meta{pointer-events:none}
+.youtube-card .side-actions{pointer-events:none}
+.youtube-card .side-actions button{pointer-events:auto}
+@media(min-width:650px){.video-card .youtube-frame{width:100%;height:100%}}
