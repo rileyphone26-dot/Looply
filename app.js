@@ -94,7 +94,10 @@ authForm.addEventListener('submit', async (event) => {
     if (authMode === 'signup') {
       const name = displayNameInput.value.trim() || email.split('@')[0];
       const {data, error} = await looplySupabase.auth.signUp({
-        email, password, options: {data: {display_name: name}}
+        email, password, options: {
+          data: {display_name: name},
+          emailRedirectTo: 'https://rileyphone26-dot.github.io/Looply/'
+        }
       });
       if (error) throw error;
       if (data.session) {
