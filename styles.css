@@ -11,3 +11,16 @@
 .auth-switch{width:100%;padding:12px 4px 2px;background:transparent;color:var(--cyan);font-size:12px;font-weight:700}
 .signed-in-email{font-size:13px;color:#e3e3e8;overflow-wrap:anywhere}
 [hidden]{display:none!important}
+
+/* Video-first feed improvements */
+.video-card video{z-index:0;object-fit:contain;background:#050507;touch-action:pan-y}
+.video-card:after{z-index:1}
+.video-card>*:not(video):not(.welcome-content){z-index:2}
+.play-indicator{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;display:grid;place-items:center;border-radius:50%;background:#0008;border:1px solid #ffffff50;font-size:25px;opacity:0;pointer-events:none;transition:opacity .15s}
+.video-card.is-paused .play-indicator{opacity:1}
+.sound-btn{position:absolute;right:15px;top:calc(68px + env(safe-area-inset-top));width:40px;height:40px;border-radius:50%;background:#0008;border:1px solid #ffffff35;font-size:17px;display:grid;place-items:center}
+.video-progress{position:absolute;z-index:4!important;left:0;right:0;bottom:calc(66px + env(safe-area-inset-bottom));height:4px;background:#ffffff40;cursor:pointer}
+.video-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink));pointer-events:none}
+.video-card .side-actions,.video-card .video-meta{z-index:3}
+.video-card video::-webkit-media-controls{display:none!important}
+@media(min-width:650px){.video-card video{object-fit:contain}.video-progress{max-width:460px;left:50%;right:auto;width:100%;transform:translateX(-50%)}}
