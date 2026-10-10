@@ -24,6 +24,3 @@
 .video-card .side-actions,.video-card .video-meta{z-index:3}
 .video-card video::-webkit-media-controls{display:none!important}
 @media(min-width:650px){.video-card video{object-fit:contain}.video-progress{max-width:460px;left:50%;right:auto;width:100%;transform:translateX(-50%)}}
-
-/* YouTube embeds in the unified feed */
-.youtube-add-btn{font-size:12px;color:#fff;background:#ff0033;padding:7px 9px;border-radius:8px;white-space:nowrap}.youtube-card{background:#000}.youtube-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;z-index:0}.youtube-label{position:absolute;z-index:3;left:14px;bottom:calc(83px + env(safe-area-inset-bottom));font-size:12px;font-weight:700;text-shadow:0 1px 5px #000;pointer-events:none}.youtube-card:after{pointer-events:none}@media(max-width:420px){.topbar{gap:10px}.brand{font-size:17px}.youtube-add-btn{font-size:11px;padding:6px 7px}.text-btn{font-size:12px}}
