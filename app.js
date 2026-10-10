@@ -27,7 +27,7 @@ function makeYouTubeCard(videoId,creator,caption){
 }
 function makeYouTubePlaylistCard(playlistId,title){
  const card=document.createElement('article');card.className='video-card youtube-card playlist-card';
- card.innerHTML=`<iframe class="youtube-frame" title="${escapeHtml(title)} playlist" data-src="https://www.youtube-nocookie.com/embed/videoseries?list=${encodeURIComponent(playlistId)}&autoplay=1&mute=1&playsinline=1&controls=1&enablejsapi=1&rel=0&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><div class="video-meta"><strong>${escapeHtml(title)}</strong><p>Playlist · Swipe to the next feed item when you're ready</p><small class="youtube-label">▶ YouTube playlist</small></div>`;
+ card.innerHTML=`<iframe class="youtube-frame" title="${escapeHtml(title)} playlist" src="https://www.youtube-nocookie.com/embed/videoseries?list=${encodeURIComponent(playlistId)}&autoplay=1&mute=1&playsinline=1&controls=1&enablejsapi=1&rel=0&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><div class="video-meta"><strong>${escapeHtml(title)}</strong><p>Playlist · Swipe to the next feed item when you're ready</p><small class="youtube-label">▶ YouTube playlist</small></div>`;
  feed.appendChild(card);if(videoObserver)videoObserver.observe(card);return card;
 }
 function wireYouTubeCard(card,videoId){
