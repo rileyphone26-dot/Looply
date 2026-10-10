@@ -42,6 +42,23 @@
       <button class="nav-item" data-page="profile"><span>♙</span><small>Profile</small></button>
     </nav>
     <input id="uploadInput" type="file" accept="video/*" hidden>
+    <dialog id="authDialog">
+      <div class="dialog-inner auth-inner">
+        <div class="dialog-heading"><strong id="authTitle">Welcome to Looply</strong><button class="close-btn" id="closeAuthBtn" aria-label="Close">✕</button></div>
+        <p class="muted" id="authMessage">Sign in or create an account to set up your Looply profile.</p>
+        <form id="authForm">
+          <label class="auth-field" id="displayNameWrap">Display name<input id="displayNameInput" type="text" maxlength="40" autocomplete="name" placeholder="What should we call you?"></label>
+          <label class="auth-field">Email<input id="emailInput" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+          <label class="auth-field">Password<input id="passwordInput" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></label>
+          <button class="auth-submit" id="authSubmit" type="submit">Create account</button>
+        </form>
+        <button class="auth-switch" id="authSwitch" type="button">Already have an account? Sign in</button>
+        <div id="signedInPanel" hidden>
+          <p id="signedInEmail" class="signed-in-email"></p>
+          <button class="auth-submit" id="signOutBtn" type="button">Sign out</button>
+        </div>
+      </div>
+    </dialog>
     <dialog id="commentDialog">
       <form method="dialog" class="dialog-inner">
         <div class="dialog-heading"><strong>Comments</strong><button class="close-btn">✕</button></div>
@@ -52,6 +69,6 @@
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
   </main>
-  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\n  <script src="app.js"></script>
 </body>
 </html>
