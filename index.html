@@ -63,12 +63,19 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
   <script>
+    // PWABuilder-style service worker registration, scoped to the GitHub Pages app folder.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(error => {
-          console.error('Nova service worker registration failed:', error);
-        });
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then(registration => {
+            console.log('Nova service worker registered for scope:', registration.scope);
+          })
+          .catch(error => {
+            console.error('Nova service worker registration failed:', error);
+          });
       });
+    } else {
+      console.error('Service workers are not supported in this browser.');
     }
   </script>
 </body>
