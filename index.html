@@ -4,16 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#080808">
-  <meta name="description" content="Nova — short videos, your way. Watch, create and share short videos with your community.">
-  <title>Nova</title>
+  <meta name="description" content="Looply by Nova — short videos, your way. Watch, create and share short videos with your community.">
+  <title>Looply — short videos, your way</title>
   <link rel="manifest" href="manifest.webmanifest">
   <script>
-    // Register early so PWABuilder's service-worker detector can find it.
-    <script>
-  if (typeof navigator.serviceWorker !== 'undefined') {
-    navigator.serviceWorker.register('sw.js')
-  }
-</script>
+    // Register the service worker so the PWA can work offline.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
     }
   </script>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -26,7 +23,7 @@
 <body>
   <main id="app">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark">◉</span><span>Nova</span></div>
+      <div class="brand"><span class="brand-mark">◉</span><span>Looply</span></div>
       <button class="text-btn" id="followingBtn">Following</button>
       <button class="text-btn active" id="forYouBtn">For You</button>
       <button class="install-app-btn" id="installAppBtn" type="button" hidden>Install</button>
@@ -44,8 +41,8 @@
     <input id="uploadInput" type="file" accept="video/*" hidden>
     <dialog id="authDialog">
       <div class="dialog-inner auth-inner">
-        <div class="dialog-heading"><strong id="authTitle">Welcome to Nova</strong><button class="close-btn" id="closeAuthBtn" aria-label="Close">✕</button></div>
-        <p class="muted" id="authMessage">Sign in or create an account to set up your Nova profile.</p>
+        <div class="dialog-heading"><strong id="authTitle">Welcome to Looply</strong><button class="close-btn" id="closeAuthBtn" aria-label="Close">✕</button></div>
+        <p class="muted" id="authMessage">Sign in or create an account to set up your Looply profile.</p>
         <form id="authForm">
           <label class="auth-field" id="displayNameWrap">Display name<input id="displayNameInput" type="text" maxlength="40" autocomplete="name" placeholder="What should we call you?"></label>
           <label class="auth-field">Email<input id="emailInput" type="email" autocomplete="email" required placeholder="you@example.com"></label>
