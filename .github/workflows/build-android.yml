@@ -12,7 +12,7 @@ on:
       - 'sw.js'
       - 'package.json'
       - 'package-lock.json'
-      - 'capacitor.config.ts'
+      - 'capacitor.config.json'
       - 'scripts/**'
       - '.github/workflows/build-android.yml'
 
