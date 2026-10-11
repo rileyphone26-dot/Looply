@@ -9,11 +9,11 @@
   <link rel="manifest" href="manifest.webmanifest">
   <script>
     // Register early so PWABuilder's service-worker detector can find it.
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js', { scope: './' })
-        .catch(function (error) {
-          console.error('Nova service worker registration failed:', error);
-        });
+    <script>
+  if (typeof navigator.serviceWorker !== 'undefined') {
+    navigator.serviceWorker.register('sw.js')
+  }
+</script>
     }
   </script>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -73,3 +73,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
