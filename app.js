@@ -225,5 +225,82 @@ window.addEventListener('appinstalled', () => {
  }
  form.addEventListener('submit',e=>{e.preventDefault();addVideo(input.value.trim());});
  document.getElementById('tiktokBack').addEventListener('click',()=>{hub.hidden=true;feed.hidden=false;document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('selected',b.dataset.page==='home'));});
- document.getElementById('tiktokConnect').addEventListener('click',()=>{message.textContent='Next setup step: create a TikTok developer app, request Login Kit and Display API access, then configure OAuth in a secure backend. Never put a client secret in this public website.';document.getElementById('tiktokUrlForm').scrollIntoView({behavior:'smooth',block:'center'});});
+ 
+ const functionUrl = NOVA_SUPABASE_URL + '/functions/v1/tiktok-auth';
+ const accountStatus = document.getElementById('tiktokAccountStatus');
+ const connectButton = document.getElementById('tiktokConnect');
+ const loadVideosButton = document.getElementById('tiktokLoadVideos');
+ const disconnectButton = document.getElementById('tiktokDisconnect');
+ const myVideos = document.getElementById('tiktokMyVideos');
+ async function tiktokRequest(action, session) {
+  const response = await fetch(functionUrl + '?action=' + encodeURIComponent(action), {
+   method: 'GET',
+   headers: { 'apikey': NOVA_SUPABASE_KEY, 'Authorization': 'Bearer ' + session.access_token }
+  });
+  const data = await response.json().catch(()=>({}));
+  if (!response.ok) throw new Error(data.error || 'TikTok request failed (' + response.status + ')');
+  return data;
+ }
+ async function refreshTikTokStatus() {
+  if (!novaSupabase) { accountStatus.textContent='Supabase authentication is not configured.'; return; }
+  const {data} = await novaSupabase.auth.getSession();
+  if (!data?.session) { accountStatus.textContent='Sign in to Looply, then connect your TikTok account.'; loadVideosButton.hidden=true; disconnectButton.hidden=true; return; }
+  try {
+   const status = await tiktokRequest('status', data.session);
+   if(status.connected) {
+    accountStatus.textContent='Connected to TikTok' + (status.profile?.display_name ? ' as ' + status.profile.display_name : '') + '.';
+    connectButton.textContent='Reconnect TikTok';
+    loadVideosButton.hidden=false; disconnectButton.hidden=false;
+   } else {
+    accountStatus.textContent='TikTok account not connected.';
+    connectButton.textContent='Connect TikTok';
+    loadVideosButton.hidden=true; disconnectButton.hidden=true;
+   }
+  } catch(error) { accountStatus.textContent=error.message; }
+ }
+ connectButton.addEventListener('click', async ()=>{
+  if (!novaSupabase) { notify('Supabase sign-in is not ready yet.'); return; }
+  const {data} = await novaSupabase.auth.getSession();
+  if (!data?.session) { notify('Sign in to Looply first, then press Connect TikTok again.'); openAuth(); return; }
+  connectButton.disabled=true; connectButton.textContent='Connecting…';
+  try {
+   const result=await tiktokRequest('start',data.session);
+   if(!result.authorize_url) throw new Error(result.error || 'Could not start TikTok authorization.');
+   window.location.assign(result.authorize_url);
+  } catch(error) { notify(error.message); connectButton.disabled=false; connectButton.textContent='Connect TikTok'; }
+ });
+ loadVideosButton.addEventListener('click', async ()=>{
+  const {data}=await novaSupabase.auth.getSession();
+  if(!data?.session)return notify('Sign in to Looply first.');
+  loadVideosButton.disabled=true; loadVideosButton.textContent='Loading…'; myVideos.innerHTML='';
+  try {
+   const result=await tiktokRequest('videos',data.session);
+   const videos=Array.isArray(result.videos)?result.videos:[];
+   if(!videos.length){myVideos.textContent='No public TikTok videos were returned for this account.';}
+   videos.forEach(video=>{
+    const card=document.createElement('article');card.className='tt-my-video';
+    if(video.id){
+     const frame=document.createElement('iframe');frame.src='https://www.tiktok.com/embed/v2/'+encodeURIComponent(video.id);frame.title='Your TikTok video';frame.loading='lazy';frame.allow='encrypted-media; fullscreen; picture-in-picture';frame.allowFullscreen=true;frame.referrerPolicy='strict-origin-when-cross-origin';card.appendChild(frame);
+    }
+    const title=document.createElement('strong');title.textContent=video.title || video.video_description || 'Your TikTok video';card.appendChild(title);
+    if(video.share_url){const link=document.createElement('a');link.href=video.share_url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Open on TikTok ↗';card.appendChild(link);}
+    myVideos.appendChild(card);
+   });
+   notify('Loaded ' + videos.length + ' TikTok video' + (videos.length===1?'':'s') + '.');
+  } catch(error) { myVideos.textContent=error.message; }
+  finally { loadVideosButton.disabled=false; loadVideosButton.textContent='Load my videos'; }
+ });
+ disconnectButton.addEventListener('click', async ()=>{
+  const {data}=await novaSupabase.auth.getSession();
+  if(!data?.session)return;
+  disconnectButton.disabled=true;
+  try { await tiktokRequest('disconnect',data.session); myVideos.innerHTML=''; notify('TikTok disconnected.'); await refreshTikTokStatus(); }
+  catch(error){notify(error.message);}
+  finally{disconnectButton.disabled=false;}
+ });
+ const callbackResult=new URLSearchParams(location.search).get('tiktok');
+ if(callbackResult){notify(callbackResult==='connected'?'TikTok connected successfully.':'TikTok connection failed. Check the setup guide and developer app settings.');history.replaceState({},document.title,location.pathname+location.hash);}
+ document.querySelector('.nav-item[data-page="discover"]').addEventListener('click',refreshTikTokStatus);
+ refreshTikTokStatus();
+
 })();
