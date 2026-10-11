@@ -21,7 +21,7 @@ In [TikTok for Developers](https://developers.tiktok.com/), create/select an app
 Use this exact redirect URI in the Login Kit product settings:
 
 ```
-https://vnggkzdythazonznfizx.supabase.co/functions/v1/tiktok-auth?action=callback
+https://vnggkzdythazonznfizx.supabase.co/functions/v1/tiktok-auth
 ```
 
 Copy the **Client key** and **Client secret** from the developer portal. Keep the secret private.
