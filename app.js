@@ -9,7 +9,7 @@ if('IntersectionObserver' in window){
     document.querySelectorAll('.video-card video').forEach(v=>{if(v!==video)v.pause()});
     video.muted=false;video.play().then(()=>card.classList.remove('is-paused')).catch(()=>{card.classList.add('is-paused');notify('Tap the video to start playback with sound.')});
    }else video.pause();
-
+  }
  }),{root:feed,threshold:[0,0.65,1]});
 }
 function makeCard(url,name,caption='My video ✨ #nova'){const card=document.createElement('article');card.className='video-card';card.innerHTML=`<video src="${url}" playsinline loop controlslist="nodownload" preload="metadata"></video><div class="play-indicator" aria-hidden="true">Ⅱ</div><button class="sound-btn" type="button" aria-label="Mute video">🔊</button><div class="video-progress" aria-label="Video progress"><div class="video-progress-fill"></div></div><div class="side-actions"><div class="avatar">${escapeHtml(name.slice(0,1).toUpperCase())}</div><button class="action-btn like-btn" aria-label="Like">♡<small><span class="like-count">0</span></small></button><button class="action-btn comment-btn" aria-label="Comment">◯<small>Comment</small></button><button class="action-btn share-btn" aria-label="Share">↗<small>Share</small></button></div><div class="video-meta"><strong>@${escapeHtml(name)}</strong><p>${escapeHtml(caption)}</p></div>`;feed.appendChild(card);wireCard(card);if(videoObserver)videoObserver.observe(card);return card}
@@ -26,9 +26,9 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigato
 // The feed starts empty until videos are uploaded.
 
 
-// Supabase authentication for Looply
-const LOOPLY_SUPABASE_URL = 'https://vnggkzdythazonznfizx.supabase.co';
-const LOOPLY_SUPABASE_KEY = 'sb_publishable_UNpqkECBh3r96pSowX0CDw_B7goBV8H';
+// Supabase authentication for Nova
+const NOVA_SUPABASE_URL = 'https://vnggkzdythazonznfizx.supabase.co';
+const NOVA_SUPABASE_KEY = 'sb_publishable_UNpqkECBh3r96pSowX0CDw_B7goBV8H';
 const authDialog = document.getElementById('authDialog');
 const authForm = document.getElementById('authForm');
 const authTitle = document.getElementById('authTitle');
@@ -43,21 +43,21 @@ const signedInPanel = document.getElementById('signedInPanel');
 const signedInEmail = document.getElementById('signedInEmail');
 const signOutBtn = document.getElementById('signOutBtn');
 let authMode = 'signup';
-let looplySupabase = null;
+let novaSupabase = null;
 
 function setAuthMode(mode) {
   authMode = mode;
   const signup = mode === 'signup';
-  authTitle.textContent = signup ? 'Join Looply' : 'Welcome back';
+  authTitle.textContent = signup ? 'Join Nova' : 'Welcome back';
   authSubmit.textContent = signup ? 'Create account' : 'Sign in';
-  authSwitch.textContent = signup ? 'Already have an account? Sign in' : 'New to Looply? Create an account';
+  authSwitch.textContent = signup ? 'Already have an account? Sign in' : 'New to Nova? Create an account';
   displayNameWrap.hidden = !signup;
   passwordInput.autocomplete = signup ? 'new-password' : 'current-password';
-  authMessage.textContent = signup ? 'Create an account to start your Looply profile.' : 'Sign in with your email and password.';
+  authMessage.textContent = signup ? 'Create an account to start your Nova profile.' : 'Sign in with your email and password.';
 }
 
 function openAuth() {
-  if (!looplySupabase) {
+  if (!novaSupabase) {
     notify('Sign-in is not configured yet. Please refresh and try again.');
     return;
   }
@@ -71,12 +71,12 @@ function openAuth() {
 function updateAccount(user) {
   const profileButton = document.querySelector('.nav-item[data-page="profile"]');
   if (user) {
-    if (profileButton) profileButton.setAttribute('aria-label', 'Your Looply profile');
+    if (profileButton) profileButton.setAttribute('aria-label', 'Your Nova profile');
     signedInEmail.textContent = 'Signed in as ' + (user.email || 'your account');
     authForm.hidden = true;
     signedInPanel.hidden = false;
     authSwitch.hidden = true;
-    authTitle.textContent = 'Your Looply account';
+    authTitle.textContent = 'Your Nova account';
     authMessage.textContent = 'Your account is connected.';
   } else {
     if (profileButton) profileButton.setAttribute('aria-label', 'Sign in or create a profile');
@@ -86,10 +86,10 @@ function updateAccount(user) {
   }
 }
 
-if (window.supabase && window.supabase.createClient && !LOOPLY_SUPABASE_KEY.startsWith('REPLACE_')) {
-  looplySupabase = window.supabase.createClient(LOOPLY_SUPABASE_URL, LOOPLY_SUPABASE_KEY);
-  looplySupabase.auth.getSession().then(({data}) => updateAccount(data?.session?.user || null));
-  looplySupabase.auth.onAuthStateChange((_event, session) => updateAccount(session?.user || null));
+if (window.supabase && window.supabase.createClient && !NOVA_SUPABASE_KEY.startsWith('REPLACE_')) {
+  novaSupabase = window.supabase.createClient(NOVA_SUPABASE_URL, NOVA_SUPABASE_KEY);
+  novaSupabase.auth.getSession().then(({data}) => updateAccount(data?.session?.user || null));
+  novaSupabase.auth.onAuthStateChange((_event, session) => updateAccount(session?.user || null));
 }
 
 authSwitch.addEventListener('click', () => setAuthMode(authMode === 'signup' ? 'signin' : 'signup'));
@@ -97,7 +97,7 @@ document.getElementById('closeAuthBtn').addEventListener('click', () => authDial
 
 authForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-  if (!looplySupabase) return notify('Supabase publishable key still needs to be added.');
+  if (!novaSupabase) return notify('Supabase publishable key still needs to be added.');
   authSubmit.disabled = true;
   authSubmit.textContent = authMode === 'signup' ? 'Creating account…' : 'Signing in…';
   try {
@@ -105,26 +105,26 @@ authForm.addEventListener('submit', async (event) => {
     const password = passwordInput.value;
     if (authMode === 'signup') {
       const name = displayNameInput.value.trim() || email.split('@')[0];
-      const {data, error} = await looplySupabase.auth.signUp({
+      const {data, error} = await novaSupabase.auth.signUp({
         email, password, options: {
           data: {display_name: name},
-          emailRedirectTo: 'https://rileyphone26-dot.github.io/Looply/'
+          emailRedirectTo: 'https://rileyphone26-dot.github.io/Nova/'
         }
       });
       if (error) throw error;
       if (data.session) {
         authDialog.close();
-        notify('Welcome to Looply!');
+        notify('Welcome to Nova!');
       } else {
         setAuthMode('signin');
         authMessage.textContent = 'Check your email for a confirmation link, then sign in.';
         notify('Account created. Check your email to confirm it.');
       }
     } else {
-      const {error} = await looplySupabase.auth.signInWithPassword({email, password});
+      const {error} = await novaSupabase.auth.signInWithPassword({email, password});
       if (error) throw error;
       authDialog.close();
-      notify('You’re signed in to Looply.');
+      notify('You’re signed in to Nova.');
     }
   } catch (error) {
     authMessage.textContent = error.message || 'Something went wrong. Please try again.';
@@ -135,15 +135,15 @@ authForm.addEventListener('submit', async (event) => {
 });
 
 signOutBtn.addEventListener('click', async () => {
-  if (!looplySupabase) return;
-  const {error} = await looplySupabase.auth.signOut();
+  if (!novaSupabase) return;
+  const {error} = await novaSupabase.auth.signOut();
   if (error) authMessage.textContent = error.message;
   else { authDialog.close(); notify('You’ve signed out.'); }
 });
 
 document.querySelector('.nav-item[data-page="profile"]').addEventListener('click', async () => {
-  if (!looplySupabase) return openAuth();
-  const {data} = await looplySupabase.auth.getUser();
+  if (!novaSupabase) return openAuth();
+  const {data} = await novaSupabase.auth.getUser();
   if (data?.user) {
     updateAccount(data.user);
     authDialog.showModal();
