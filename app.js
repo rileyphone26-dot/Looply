@@ -150,3 +150,27 @@ document.querySelector('.nav-item[data-page="profile"]').addEventListener('click
   } else openAuth();
 });
 
+
+
+// Install Nova from supported browsers (Progressive Web App)
+let novaInstallPrompt = null;
+const novaInstallButton = document.getElementById('installAppBtn');
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  novaInstallPrompt = event;
+  if (novaInstallButton) novaInstallButton.hidden = false;
+});
+novaInstallButton?.addEventListener('click', async () => {
+  if (!novaInstallPrompt) {
+    notify('On your browser menu, choose Install app or Add to Home screen.');
+    return;
+  }
+  novaInstallPrompt.prompt();
+  await novaInstallPrompt.userChoice;
+  novaInstallPrompt = null;
+  novaInstallButton.hidden = true;
+});
+window.addEventListener('appinstalled', () => {
+  if (novaInstallButton) novaInstallButton.hidden = true;
+  notify('Nova has been installed.');
+});
