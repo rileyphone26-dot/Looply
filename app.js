@@ -18,7 +18,7 @@ function wireCard(card){const video=card.querySelector('video');if(!video)return
 function addFiles(files){const list=[...files].filter(f=>f.type.startsWith('video/'));if(!list.length){notify('Choose a video file to upload.');return}for(const f of list){if(f.size>250*1024*1024){notify('That video is over 250 MB. Choose a smaller file for now.');continue}const url=URL.createObjectURL(f);makeCard(url,'you',f.name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').slice(0,100)||'My video ✨ #nova')}feed.scrollTo({top:feed.scrollHeight,behavior:'smooth'});notify('Video preview added for this session. Online uploads are the next step.')}
 uploadInput.addEventListener('change',()=>{addFiles(uploadInput.files);uploadInput.value=''});firstUpload.addEventListener('change',()=>{addFiles(firstUpload.files);firstUpload.value=''});document.getElementById('uploadBtn').addEventListener('click',()=>uploadInput.click());
 document.getElementById('sendComment').addEventListener('click',()=>{const text=commentInput.value.trim();if(!text)return;const row=document.createElement('div');row.className='comment-row';row.textContent='you: '+text;commentList.appendChild(row);commentInput.value=''});
-document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('selected',x===b));const page=b.dataset.page;if(page==='home'){notify('You’re on Home.')}else if(page==='discover'){notify('Discover is a demo screen in this starter.')}else if(page==='inbox'){notify('Inbox needs an online backend to work.')}else if(page==='profile'){notify('Profile: @you · demo account')}}));
+document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('selected',x===b));const page=b.dataset.page;if(page==='home'){document.getElementById('tiktokHub').hidden=true;feed.hidden=false;notify('You’re on Home.')}else if(page==='discover'){feed.hidden=true;document.getElementById('tiktokHub').hidden=false;notify('TikTok videos are ready to preview.')}else if(page==='inbox'){notify('Inbox needs an online backend to work.')}else if(page==='profile'){notify('Profile: @you · demo account')}}));
 document.getElementById('searchBtn').addEventListener('click',()=>notify('Search is coming soon.'));
 document.getElementById('followingBtn').addEventListener('click',()=>notify('Following feed needs user accounts.'));
 document.getElementById('forYouBtn').addEventListener('click',()=>notify('You’re watching For You'));
@@ -193,3 +193,37 @@ window.addEventListener('appinstalled', () => {
   if (novaInstallButton) novaInstallButton.hidden = true;
   notify('Looply has been installed.');
 });
+
+
+// TikTok public-video embed hub. This uses TikTok's official embed player;
+// it does not scrape TikTok or pretend that account OAuth is configured.
+(function initTikTokHub(){
+ const hub=document.getElementById('tiktokHub');
+ if(!hub)return;
+ const form=document.getElementById('tiktokUrlForm');
+ const input=document.getElementById('tiktokUrl');
+ const list=document.getElementById('tiktokVideos');
+ const message=document.getElementById('tiktokMessage');
+ function videoIdFromUrl(raw){
+  try{
+   const u=new URL(raw);
+   if(!/(^|\\.)tiktok\\.com$/i.test(u.hostname))return null;
+   const match=u.pathname.match(/\\/video\\/(\\d+)/);
+   return match?{id:match[1],url:u.href}:null;
+  }catch(e){return null}
+ }
+ function addVideo(raw){
+  const parsed=videoIdFromUrl(raw);
+  if(!parsed){message.textContent='That link could not be recognised. Paste a public TikTok link containing /video/ and the video ID.';return}
+  if(list.querySelector('[data-video-id="'+parsed.id+'"]')){message.textContent='That video is already in this list.';return}
+  const card=document.createElement('article');card.className='tt-video-card';card.dataset.videoId=parsed.id;
+  const frame=document.createElement('iframe');frame.src='https://www.tiktok.com/embed/v2/'+parsed.id;frame.title='TikTok video '+parsed.id;frame.loading='lazy';frame.allow='encrypted-media; fullscreen; picture-in-picture';frame.allowFullscreen=true;frame.referrerPolicy='strict-origin-when-cross-origin';
+  const foot=document.createElement('div');foot.className='tt-video-foot';
+  const label=document.createElement('span');label.textContent='TikTok public video';
+  const link=document.createElement('a');link.href=parsed.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Open original ↗';
+  foot.append(label,link);card.append(frame,foot);list.prepend(card);message.textContent='Video added. Playback is provided by TikTok; availability depends on the creator and TikTok.';
+ }
+ form.addEventListener('submit',e=>{e.preventDefault();addVideo(input.value.trim());});
+ document.getElementById('tiktokBack').addEventListener('click',()=>{hub.hidden=true;feed.hidden=false;document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('selected',b.dataset.page==='home'));});
+ document.getElementById('tiktokConnect').addEventListener('click',()=>{message.textContent='Next setup step: create a TikTok developer app, request Login Kit and Display API access, then configure OAuth in a secure backend. Never put a client secret in this public website.';document.getElementById('tiktokUrlForm').scrollIntoView({behavior:'smooth',block:'center'});});
+})();
