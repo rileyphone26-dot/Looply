@@ -31,6 +31,21 @@
     </header>
     <section id="feed" class="feed" aria-label="Short video feed"></section>
     <input id="firstUpload" type="file" accept="video/*" hidden>
+    <section id="tiktokHub" class="tiktok-hub" hidden aria-label="TikTok integration">
+      <header class="tiktok-header">
+        <button id="tiktokBack" class="tt-back" type="button" aria-label="Back to Looply feed">‹</button>
+        <div><strong>Looply <span class="tt-x">×</span> TikTok</strong><small>Public videos · official embeds</small></div>
+        <span class="tt-pill">PREVIEW</span>
+      </header>
+      <div class="tiktok-content">
+        <div class="tt-intro"><span class="tt-kicker">WATCH TOGETHER</span><h1>Bring TikTok into <em>Looply.</em></h1><p>Paste a public TikTok video link to watch it here. Videos play using TikTok’s official embed player.</p></div>
+        <form id="tiktokUrlForm" class="tt-url-form"><label for="tiktokUrl">Public TikTok video URL</label><div class="tt-input-row"><input id="tiktokUrl" type="url" placeholder="https://www.tiktok.com/@creator/video/…" required><button type="submit">Play video</button></div><small>Use a public video link in the standard TikTok format.</small></form>
+        <div id="tiktokMessage" class="tt-message" role="status">No video added yet. Paste a link above to get started.</div>
+        <div id="tiktokVideos" class="tt-videos"></div>
+        <section class="tt-connect-card"><div class="tt-connect-icon">♪</div><div><h2>Connect your TikTok account</h2><p>Account connection needs a TikTok developer app, approved Login Kit / Display API access, and a secure OAuth backend. It is not connected yet.</p><button id="tiktokConnect" type="button">Connection setup</button></div></section>
+        <p class="tt-privacy">🔒 <strong>Privacy first.</strong> Looply won’t ask for your TikTok password. TikTok likes and comments on other people’s videos cannot be synced through the standard Display API, so use TikTok itself for those reactions.</p>
+      </div>
+    </section>
     <nav class="bottom-nav" aria-label="Main navigation">
       <button class="nav-item selected" data-page="home"><span>⌂</span><small>Home</small></button>
       <button class="nav-item" data-page="discover"><span>⌕</span><small>Discover</small></button>
