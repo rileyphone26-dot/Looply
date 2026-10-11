@@ -9,7 +9,7 @@ const TIKTOK_REDIRECT_URI = Deno.env.get("TIKTOK_REDIRECT_URI") ?? "";
 const LOOPLY_SITE_URL = Deno.env.get("LOOPLY_SITE_URL") ?? "https://rileyphone26-dot.github.io/Nova/";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": LOOPLY_SITE_URL.replace(/\/$/, ""),
+  "Access-Control-Allow-Origin": new URL(LOOPLY_SITE_URL).origin,
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Vary": "Origin",
