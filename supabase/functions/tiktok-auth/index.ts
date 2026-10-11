@@ -98,7 +98,7 @@ async function freshConnection(userId: string) {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   const url = new URL(req.url);
-  const action = url.searchParams.get("action") || "status";
+  const action = url.searchParams.get("action") || ((url.searchParams.has("code") || url.searchParams.has("state") || url.searchParams.has("error")) ? "callback" : "status");
 
   if (action === "callback") {
     if (url.searchParams.get("error")) return siteResult("error");
