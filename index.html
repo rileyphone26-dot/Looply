@@ -7,6 +7,14 @@
   <meta name="description" content="Nova — short videos, your way. Watch, create and share short videos with your community.">
   <title>Nova</title>
   <link rel="manifest" href="manifest.webmanifest">
+  <script>
+    // Register immediately so PWABuilder can detect Nova's service worker.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/Nova/sw.js', { scope: '/Nova/' })
+        .then(registration => console.log('Nova service worker registered:', registration.scope))
+        .catch(error => console.error('Nova service worker registration failed:', error));
+    }
+  </script>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -62,21 +70,5 @@
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
-  <script>
-    // PWABuilder-style service worker registration, scoped to the GitHub Pages app folder.
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' })
-          .then(registration => {
-            console.log('Nova service worker registered for scope:', registration.scope);
-          })
-          .catch(error => {
-            console.error('Nova service worker registration failed:', error);
-          });
-      });
-    } else {
-      console.error('Service workers are not supported in this browser.');
-    }
-  </script>
 </body>
 </html>
