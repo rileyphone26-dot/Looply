@@ -256,7 +256,7 @@ window.addEventListener('appinstalled', () => {
     connectButton.textContent='Connect TikTok';
     loadVideosButton.hidden=true; disconnectButton.hidden=true;
    }
-  } catch(error) { accountStatus.textContent=error.message; }
+  } catch(error) { accountStatus.textContent=error instanceof TypeError ? 'TikTok backend not deployed yet. Follow docs/TIKTOK_SETUP.md to enable account linking.' : error.message; }
  }
  connectButton.addEventListener('click', async ()=>{
   if (!novaSupabase) { notify('Supabase sign-in is not ready yet.'); return; }
@@ -267,7 +267,7 @@ window.addEventListener('appinstalled', () => {
    const result=await tiktokRequest('start',data.session);
    if(!result.authorize_url) throw new Error(result.error || 'Could not start TikTok authorization.');
    window.location.assign(result.authorize_url);
-  } catch(error) { notify(error.message); connectButton.disabled=false; connectButton.textContent='Connect TikTok'; }
+  } catch(error) { notify(error instanceof TypeError ? 'TikTok backend is not deployed yet. Follow docs/TIKTOK_SETUP.md.' : error.message); connectButton.disabled=false; connectButton.textContent='Connect TikTok'; }
  });
  loadVideosButton.addEventListener('click', async ()=>{
   const {data}=await novaSupabase.auth.getSession();
