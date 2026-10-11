@@ -8,6 +8,10 @@
   <title>Nova</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,6 +20,7 @@
       <div class="brand"><span class="brand-mark">◉</span><span>Nova</span></div>
       <button class="text-btn" id="followingBtn">Following</button>
       <button class="text-btn active" id="forYouBtn">For You</button>
+      <button class="install-app-btn" id="installAppBtn" type="button" hidden>Install</button>
       <button class="search-btn" id="searchBtn" aria-label="Search">⌕</button>
     </header>
     <section id="feed" class="feed" aria-label="Short video feed"></section>
