@@ -1,0 +1,2 @@
+[functions.tiktok-auth]
+verify_jwt = false
