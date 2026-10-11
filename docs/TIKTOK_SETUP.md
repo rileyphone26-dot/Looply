@@ -41,7 +41,7 @@ This creates the OAuth state and token tables. The tables intentionally have no 
 1. Open the Nova GitHub repository → **Settings → Secrets and variables → Actions**.
 2. Under **Repository secrets**, add or update:
    - `DEPLOY_TOKEN` — a Supabase personal access token created at [Supabase Account Tokens](https://supabase.com/dashboard/account/tokens). Do not use the publishable key.
-   - `PROJECT_ID` — the Supabase project reference `vnggkzdythazonznfizx`, not the display name “Nova”.
+   - `PROJECT_NOVA` — the Supabase project reference `vnggkzdythazonznfizx`, not the display name “Nova”.
 3. Open [GitHub Actions](https://github.com/rileyphone26-dot/Nova/actions) → **Deploy Looply TikTok Edge Function** → **Run workflow**.
 
 The workflow is configured to read these exact secret names and deploys only the `tiktok-auth` Edge Function. Do not add TikTok client secrets to GitHub Actions; put those directly in Supabase Edge Function secrets in the next step.
