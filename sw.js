@@ -1,7 +1,8 @@
-const CACHE_NAME = 'nova-v11';
+const CACHE_NAME = 'nova-v12';
 const APP_SHELL = [
   './',
   './index.html',
+  './offline.html',
   './styles.css',
   './app.js',
   './manifest.webmanifest',
@@ -29,42 +30,57 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
-
-  // Leave third-party requests (such as Supabase and the JS CDN) to the browser.
+  // Do not intercept Supabase, CDN, or other third-party requests.
   if (url.origin !== self.location.origin) return;
 
-  // For page navigation, try the network first and show the cached app offline.
   if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));
-          }
-          return response;
-        })
-        .catch(async () => (await caches.match(request)) || (await caches.match('./index.html')))
-    );
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(request);
+        if (response && response.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(request, response.clone()).catch(() => {});
+        }
+        return response;
+      } catch (error) {
+        return (await caches.match(request)) ||
+          (await caches.match('./offline.html')) ||
+          new Response('You are offline.', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+          });
+      }
+    })());
     return;
   }
 
-  // For local app files, use the cache first and update it from the network.
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      const networkRequest = fetch(request).then((response) => {
-        if (response.ok) {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-        }
-        return response;
+  // Cache-first for local app resources, with a network fallback.
+  event.respondWith((async () => {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    try {
+      const response = await fetch(request);
+      if (response && response.ok) {
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(request, response.clone()).catch(() => {});
+      }
+      return response;
+    } catch (error) {
+      return new Response('This resource is unavailable offline.', {
+        status: 503,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       });
-      return cached || networkRequest;
-    })
-  );
+    }
+  })());
 });
