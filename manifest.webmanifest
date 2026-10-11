@@ -1,6 +1,6 @@
 {
-  "name": "Looply — Short Videos",
-  "short_name": "Looply",
+  "name": "Nova",
+  "short_name": "Nova",
   "description": "A short-video app you can make your own.",
   "start_url": "./",
   "scope": "./",
