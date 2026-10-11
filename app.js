@@ -207,8 +207,8 @@ window.addEventListener('appinstalled', () => {
  function videoIdFromUrl(raw){
   try{
    const u=new URL(raw);
-   if(!/(^|\\.)tiktok\\.com$/i.test(u.hostname))return null;
-   const match=u.pathname.match(/\\/video\\/(\\d+)/);
+   if(!/(^|\.)tiktok\.com$/i.test(u.hostname))return null;
+   const match=u.pathname.match(/\/video\/(\d+)/);
    return match?{id:match[1],url:u.href}:null;
   }catch(e){return null}
  }
