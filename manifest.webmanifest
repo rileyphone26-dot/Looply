@@ -1,12 +1,29 @@
 {
-  "name": "Nova",
+  "name": "Nova — Short Videos",
   "short_name": "Nova",
-  "description": "A short-video app you can make your own.",
+  "description": "A short-video community. Watch, create and share on Nova.",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
   "background_color": "#080808",
   "theme_color": "#080808",
-  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "categories": [
+    "social",
+    "video",
+    "entertainment"
+  ],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
