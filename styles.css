@@ -24,3 +24,7 @@
 .video-card .side-actions,.video-card .video-meta{z-index:3}
 .video-card video::-webkit-media-controls{display:none!important}
 @media(min-width:650px){.video-card video{object-fit:contain}.video-progress{max-width:460px;left:50%;right:auto;width:100%;transform:translateX(-50%)}}
+
+/* Install button for supported browsers */
+.install-app-btn{position:absolute;right:48px;top:calc(11px + env(safe-area-inset-top));padding:7px 10px;border:1px solid #ffffff45;border-radius:999px;background:#16161beF;color:#fff;font-size:11px;font-weight:800;box-shadow:0 2px 12px #0005}
+.install-app-btn[hidden]{display:none}
