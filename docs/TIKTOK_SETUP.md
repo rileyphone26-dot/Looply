@@ -36,7 +36,17 @@ This creates the OAuth state and token tables. The tables intentionally have no 
 
 ## 3. Deploy the Edge Function
 
-Install/use the Supabase CLI in a trusted terminal, log in, link the project, and deploy:
+**Browser-only option (no Linux or local terminal needed):**
+
+1. Open the Nova GitHub repository → **Settings → Secrets and variables → Actions**.
+2. Under **Repository secrets**, add:
+   - `SUPABASE_ACCESS_TOKEN` — create a personal access token at [Supabase Account Tokens](https://supabase.com/dashboard/account/tokens).
+   - `SUPABASE_PROJECT_ID` — set this to `vnggkzdythazonznfizx`.
+3. Open **Actions → Deploy Looply TikTok Edge Function → Run workflow**.
+
+The workflow deploys only the `tiktok-auth` Edge Function. Do not add TikTok client secrets to GitHub Actions; put those directly in Supabase Edge Function secrets in the next step.
+
+**Terminal option:** from a trusted terminal, run:
 
 ```sh
 supabase login
